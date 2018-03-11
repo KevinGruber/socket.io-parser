@@ -7,8 +7,6 @@
 var isArray = require('isarray');
 var isBuf = require('./is-buffer');
 var toString = Object.prototype.toString;
-var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
-var withNativeFile = typeof global.File === 'function' || toString.call(global.File) === '[object FileConstructor]';
 
 /**
  * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -100,8 +98,8 @@ exports.removeBlobs = function(data, callback) {
     if (!obj) return obj;
 
     // convert any blob
-    if ((withNativeBlob && obj instanceof Blob) ||
-        (withNativeFile && obj instanceof File)) {
+    if ((obj instanceof Blob) ||
+        (obj instanceof File)) {
       pendingBlobs++;
 
       // async filereader
